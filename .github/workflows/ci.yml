@@ -40,15 +40,16 @@ jobs:
       - name: No third-party imports
         # The whole install story rests on this being true. If someone adds a
         # dependency, CI should say so before a user hits a pip failure.
+        # Detection is by spec origin rather than sys.stdlib_module_names,
+        # which only exists on 3.10+ and would make this step itself the thing
+        # that breaks the 3.9 build.
         run: |
           python - <<'PY'
-          import ast, pathlib, sys
-          stdlib = set(sys.stdlib_module_names)
+          import ast, importlib.util, pathlib, sys
           local = {p.stem for p in pathlib.Path("zhtimes").glob("*.py")}
-          bad = []
-          for f in pathlib.Path("zhtimes").glob("*.py"):
-              tree = ast.parse(f.read_text())
-              for node in ast.walk(tree):
+          third = []
+          for f in sorted(pathlib.Path("zhtimes").glob("*.py")):
+              for node in ast.walk(ast.parse(f.read_text())):
                   if isinstance(node, ast.Import):
                       mods = [a.name.split(".")[0] for a in node.names]
                   elif isinstance(node, ast.ImportFrom):
@@ -56,11 +57,33 @@ jobs:
                   else:
                       continue
                   for m in mods:
-                      if m and m not in stdlib and m not in local:
-                          bad.append(f"{f.name}: {m}")
-          if bad:
-              print("Third-party imports found:\n  " + "\n  ".join(bad)); sys.exit(1)
+                      if not m or m in local or m in sys.builtin_module_names:
+                          continue
+                      try:
+                          spec = importlib.util.find_spec(m)
+                      except (ImportError, ValueError):
+                          third.append(f"{f.name}: {m} (not importable)")
+                          continue
+                      origin = (spec.origin or "") if spec else ""
+                      if "site-packages" in origin or "dist-packages" in origin:
+                          third.append(f"{f.name}: {m}")
+          if third:
+              print("Third-party imports found:\n  " + "\n  ".join(sorted(set(third))))
+              sys.exit(1)
           print("stdlib only — no dependencies to install")
+          PY
+
+      - name: Modules import and run on this version
+        # compileall only proves it parses. This proves the code actually loads
+        # on the oldest supported interpreter.
+        run: |
+          ZHT_STATE_DIR=/tmp/zht ZHT_WWW_DIR=/tmp/zht/www python - <<'PY'
+          import sys
+          sys.path.insert(0, "zhtimes")
+          import settings, discover, match, research, report, resolve, run
+          print(f"all modules import on Python {'.'.join(map(str, sys.version_info[:3]))}")
+          print(f"  timezone handling: {settings.TZ_NAME}")
+          print(f"  scheduler next-run logic: {run.next_run.__name__} present")
           PY
 
   render:
