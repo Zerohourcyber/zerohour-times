@@ -28,7 +28,7 @@ docker --version
 ```bash
 git clone https://github.com/Zerohourcyber/zerohour-times.git
 cd zerohour-times
-docker compose run --rm --no-deps --service-ports zerohour-times demo
+docker compose -f docker-compose.demo.yml up --build
 ```
 
 Open <http://localhost:8099>. That is the newspaper, built from three fictional

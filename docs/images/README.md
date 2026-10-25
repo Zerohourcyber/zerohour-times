@@ -7,7 +7,7 @@ To produce it:
 
 1. Run the demo so the page is populated with the bundled sample data:
    ```bash
-   docker compose run --rm --no-deps --service-ports zerohour-times demo
+   docker compose -f docker-compose.demo.yml up --build
    ```
 2. Open <http://localhost:8099> at roughly 1400px wide.
 3. Capture the full page (Firefox: right-click → *Take Screenshot* → *Save full

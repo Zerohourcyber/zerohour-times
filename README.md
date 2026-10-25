@@ -27,7 +27,7 @@ prints the result. Full credit and the reasoning behind that boundary are in
 > bundled fictional data — no API key, no JobSync account, nothing to configure:
 >
 > ```bash
-> docker compose run --rm --no-deps --service-ports zerohour-times demo
+> docker compose -f docker-compose.demo.yml up --build
 > ```
 
 **Docs:** [Quick start](#quick-start) · [Full tutorial](docs/TUTORIAL.md) ·
@@ -88,7 +88,9 @@ evaluated, what it got wrong, and what it still gets wrong.
 
 ## Quick start
 
-**Requirements:** Docker, and about ten minutes.
+**Requirements:** Docker, and about ten minutes. Linux, macOS (Intel or Apple
+Silicon) and Windows all work — on Windows, run these commands inside WSL2 or
+Git Bash, because `setup.sh` is a shell script.
 
 ```bash
 git clone https://github.com/Zerohourcyber/zerohour-times.git
@@ -117,7 +119,7 @@ The complete beginner walkthrough is **[docs/TUTORIAL.md](docs/TUTORIAL.md)**.
 
 |  | Demo | Live |
 |---|---|---|
-| Command | `docker compose run --rm --no-deps --service-ports zerohour-times demo` | `docker compose up -d` |
+| Command | `docker compose -f docker-compose.demo.yml up --build` | `docker compose up -d` |
 | Needs an API key | No | For assessments and research |
 | Needs a JobSync account | No | Yes |
 | Data shown | Three **fictional** jobs bundled with the repo | Real openings from your watchlist |

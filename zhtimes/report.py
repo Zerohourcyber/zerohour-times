@@ -490,12 +490,26 @@ This sheet resets itself every quarter hour &middot; {html.escape(now)}</footer>
     return "\n".join(P)
 
 
+def load_config(path):
+    """Fall back to the bundled example when no config.json is mounted.
+
+    The container only ever gets a config.json as a bind mount, so demo mode and
+    a bare `docker run` have none. Exiting here meant nothing was written and the
+    dashboard served a directory listing of an empty folder instead of a page.
+    """
+    if os.path.exists(path):
+        return json.load(open(path))
+    example = os.path.join(M.S.APP_DIR, "config.example.json")
+    print(f"# no config at {path} — falling back to {example}", file=sys.stderr)
+    return json.load(open(example))
+
+
 def main():
     ap = argparse.ArgumentParser(description="Build the job intelligence dashboard")
     ap.add_argument("--config", default=M.S.CONFIG_PATH)
     ap.add_argument("--out", default=WWW)
     a = ap.parse_args()
-    cfg = json.load(open(a.config))
+    cfg = load_config(a.config)
     data = build(cfg)
     atomic_write(os.path.join(a.out, "report.json"), json.dumps(data, indent=1))
     atomic_write(os.path.join(a.out, "index.html"), render(data))

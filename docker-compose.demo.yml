@@ -1,0 +1,20 @@
+# Demo only — the front page, built from bundled fictional data.
+#
+#     docker compose -f docker-compose.demo.yml up --build
+#
+# No .env, no JobSync, no API key, nothing to configure. It exists as its own
+# file because the real stack (docker-compose.yml) requires AUTH_SECRET and
+# ENCRYPTION_KEY, and Compose resolves required variables for the whole file
+# before it picks a service — so a demo run out of that file fails on secrets
+# the demo never uses. The data is in samples/, and every company in it is
+# invented.
+name: zerohour-times-demo
+
+services:
+  demo:
+    build: .
+    image: zerohour-times:local
+    command: demo
+    ports:
+      # Localhost only, like the real thing.
+      - "127.0.0.1:${ZHT_DASHBOARD_PORT:-8099}:8099"

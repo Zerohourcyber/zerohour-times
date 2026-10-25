@@ -145,3 +145,57 @@ jobs:
             echo "expected compose to refuse to start without AUTH_SECRET"; exit 1
           fi
           echo "correctly refuses to start unconfigured"
+      - name: Demo compose needs no secrets at all
+        run: |
+          rm -f .env
+          docker compose -f docker-compose.demo.yml config --quiet
+          echo "demo compose valid with no .env"
+
+  demo:
+    name: The documented demo command works on a clean clone
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Everything above tests modules in isolation with paths supplied by hand.
+      # This runs what the README actually tells a stranger to type, on a tree
+      # with no .env, no config.json and no profile.md — which is how demo mode
+      # stayed broken while CI was green.
+      - name: Confirm the tree really is unconfigured
+        run: |
+          for f in .env config.json profile.md; do
+            test ! -e "$f" || { echo "$f should not be in the repo"; exit 1; }
+          done
+      - name: docker compose -f docker-compose.demo.yml up --build
+        run: docker compose -f docker-compose.demo.yml up --build -d
+      - name: Wait for the front page
+        run: |
+          for i in $(seq 1 30); do
+            curl -fsS http://127.0.0.1:8099/ -o page.html && break
+            sleep 2
+          done
+          test -s page.html || { docker compose -f docker-compose.demo.yml logs; exit 1; }
+      - name: Assert it served the newspaper, not a directory listing
+        run: |
+          python3 - <<'PY2'
+          import pathlib, sys
+          t = pathlib.Path("page.html").read_text()
+          checks = {
+              "masthead":              "The ZeroHour Times" in t,
+              "three sample jobs":     t.count('<details class="ad"') == 3,
+              "sample data rendered":  "Northwind" in t,
+              "not a directory list":  "Directory listing" not in t,
+              "not the placeholder":   "No edition has been printed yet" not in t,
+          }
+          for k, v in checks.items():
+              print(f"  {'ok ' if v else 'FAIL'} {k}")
+          sys.exit(0 if all(checks.values()) else 1)
+          PY2
+      - name: Directory listing is refused when there is no page
+        run: |
+          docker compose -f docker-compose.demo.yml exec -T demo \
+            sh -c 'rm -f /app/samples/state/www/index.html'
+          code=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8099/)
+          test "$code" = "404" || { echo "expected 404, got $code"; exit 1; }
+          echo "no page -> 404, no file listing"
+      - if: always()
+        run: docker compose -f docker-compose.demo.yml down -v

@@ -70,9 +70,45 @@ def next_run(now):
     return target if target > now else target + timedelta(days=1)
 
 
+PLACEHOLDER = """<!doctype html><meta charset="utf-8">
+<title>The ZeroHour Times</title>
+<style>body{background:#f4f1ea;color:#1a1a1a;font-family:Georgia,serif;margin:0;
+display:grid;place-items:center;height:100vh;text-align:center}
+h1{font-size:2.2rem;letter-spacing:.02em;border-bottom:3px double #1a1a1a;padding-bottom:.3em}
+p{max-width:34rem;line-height:1.6}code{background:#e6e1d6;padding:.15em .4em}</style>
+<div><h1>The ZeroHour Times</h1>
+<p>No edition has been printed yet. The front page appears once the pipeline has
+run at least once &mdash; <code>docker compose logs -f zerohour-times</code> to
+watch it, or <code>docker compose exec zerohour-times python3 /app/zhtimes/run.py once</code>
+to run it now.</p></div>
+"""
+
+
+class Dashboard(SimpleHTTPRequestHandler):
+    """Serves the report and nothing else.
+
+    SimpleHTTPRequestHandler lists the directory when index.html is missing,
+    which turned a failed render into a file listing of our state directory.
+    """
+
+    def list_directory(self, path):
+        self.send_error(404, "No edition yet")
+        return None
+
+    def log_message(self, fmt, *args):
+        # log_error() passes an int first, so index nothing and format nothing:
+        # a raised TypeError in here would kill the request thread.
+        if "200" not in " ".join(str(a) for a in args):
+            super().log_message(fmt, *args)
+
+
 def serve():
     os.makedirs(S.WWW_DIR, exist_ok=True)
-    handler = partial(SimpleHTTPRequestHandler, directory=S.WWW_DIR)
+    index = os.path.join(S.WWW_DIR, "index.html")
+    if not os.path.exists(index):
+        with open(index, "w") as fh:
+            fh.write(PLACEHOLDER)
+    handler = partial(Dashboard, directory=S.WWW_DIR)
     httpd = ThreadingHTTPServer((S.DASHBOARD_BIND, S.DASHBOARD_PORT), handler)
     print(f"dashboard on http://{S.DASHBOARD_BIND}:{S.DASHBOARD_PORT}  "
           f"(read-only, UNAUTHENTICATED — do not expose publicly)", flush=True)
@@ -89,7 +125,13 @@ def main():
         serve()
         return 0
     if mode == "demo":
-        os.environ.setdefault("ZHT_STATE_DIR", os.path.join(os.path.dirname(HERE), "samples", "state"))
+        # setdefault() never fired: the image already sets ZHT_STATE_DIR=/data,
+        # so demo mode read an empty state dir and rendered nothing. settings is
+        # imported above, so this process's own copy has to be corrected too —
+        # report.py runs as a subprocess and picks the paths up from the env.
+        state = os.path.join(os.path.dirname(HERE), "samples", "state")
+        os.environ["ZHT_STATE_DIR"] = S.STATE_DIR = state
+        os.environ["ZHT_WWW_DIR"] = S.WWW_DIR = os.path.join(state, "www")
         stage("report.py", required=True)
         serve()
         return 0
