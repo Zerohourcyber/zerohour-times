@@ -73,6 +73,16 @@ jobs:
           print("stdlib only — no dependencies to install")
           PY
 
+      - name: Lint for undefined names
+        # pyflakes is a CI tool, not a runtime dependency — the application
+        # itself still installs nothing. This step exists because compiling and
+        # importing both passed while discover.py referenced two names that were
+        # never defined: the crash only happened once a function was called, so
+        # green CI shipped broken code. pyflakes catches exactly that class.
+        run: |
+          pip install --quiet pyflakes
+          python -m pyflakes zhtimes/*.py scripts/*.py samples/*.py
+
       - name: Modules import and run on this version
         # compileall only proves it parses. This proves the code actually loads
         # on the oldest supported interpreter.

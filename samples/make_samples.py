@@ -5,7 +5,7 @@ Everything here is FICTIONAL — an invented candidate, invented employers,
 invented postings. No real assessment, résumé or job history from any user is
 included in this repository. Re-run to regenerate:  python3 samples/make_samples.py
 """
-import json, os, pathlib
+import json, pathlib
 from datetime import datetime, timedelta, timezone
 
 OUT = pathlib.Path(__file__).parent / "state"

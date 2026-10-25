@@ -9,7 +9,7 @@ import os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import settings as S
 
-import argparse, collections, json, re, sys
+import argparse, collections, json, sys
 
 # What each category SHOULD produce. These are expectations about the floor, not
 # ground truth about the roles: a flag means "look at this", not "this is wrong".

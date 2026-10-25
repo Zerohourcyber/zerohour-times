@@ -23,7 +23,7 @@ token resolution into the watchlist, USAJOBS.
 import argparse, json, re, sys, urllib.error, urllib.parse, urllib.request
 from datetime import datetime, timezone
 
-import os, sys
+import os
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import settings as S
@@ -225,7 +225,13 @@ QUEUE_FILE = f"{STATE_DIR}/queue.json"
 # whole budget pushing, leaving matching to fail every lookup and assess nothing —
 # which is exactly what happened on 2026-10-24 with 119 employers. Discovery is
 # therefore capped at roughly half, leaving headroom for the stage behind it.
+UA = S.USER_AGENT
 MCP_CALL_BUDGET = S.MCP_CALL_BUDGET
+# Calls held back for add_jobs_batch, the only part that actually puts jobs into
+# JobSync. Spending the whole budget on lookups means the first batch trips the
+# ceiling and is counted but never sent, so nothing is ever created.
+PUSH_RESERVE = 12
+LOOKUP_BUDGET = max(1, MCP_CALL_BUDGET - PUSH_RESERVE)
 
 
 def load_seen(path=SEEN_FILE):
