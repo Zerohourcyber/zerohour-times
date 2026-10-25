@@ -288,6 +288,30 @@ def validate(score, recommendation, rows, elig, title=""):
 
 # ----------------------------------------------------------------- spend
 
+def already_assessed(path=None):
+    """URLs this pipeline has already scored, from its own append-only log.
+
+    Without this, matching asks JobSync about every queued posting on every run.
+    That is one MCP call per posting per day — which, on top of discovery's
+    share of the same 100/hour ceiling, starves matching entirely once the
+    watchlist is large. The log already knows the answer; asking again buys
+    nothing and costs the budget that would have scored new jobs.
+    """
+    out = set()
+    try:
+        with open(path or ASSESS_LOG) as fh:
+            for line in fh:
+                try:
+                    r = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                if r.get("score") is not None and r.get("jobId") and r.get("url"):
+                    out.add(r["url"])
+    except OSError:
+        pass
+    return out
+
+
 def load_external(path=EXTERNAL_FILE):
     """URLs JobSync already has a match for that this pipeline did not create."""
     try:
@@ -470,10 +494,15 @@ def main():
           f"${cfg['max_usd_per_day'] - spend['usd']:.2f} left today")
 
     external = load_external()
+    done_locally = set() if a.force else already_assessed()
+    saved_calls = 0
     todo, rid = [], 2000
     for url, posting in queue.items():
         if len(todo) >= budget_jobs:
             break
+        if url in done_locally or (url in external and not a.force):
+            saved_calls += 1
+            continue                       # known already — costs no MCP call
         if a.calibrate:
             # No lookup: calibration postings are deliberately never added to
             # JobSync, so there is no jobId and nothing to overwrite.
@@ -497,6 +526,9 @@ def main():
         todo.append((job_id, url, posting))
 
     save_external(external)
+    if saved_calls:
+        print(f"# {saved_calls} posting(s) already assessed — skipped locally, "
+              f"{saved_calls} MCP call(s) saved")
     if external:
         print(f"# {len(external)} job(s) already carry a match in JobSync — left untouched")
     print(f"# to score: {len(todo)}")

@@ -144,7 +144,9 @@ def build(cfg):
     stages = [
         stage("Discovery", last_run.get("ran_at"), last_run.get("ok", False),
               f"{last_run.get('kept', 0)} kept of {last_run.get('fetched', 0)} fetched "
-              f"across {last_run.get('companies', 0)} employers"),
+              f"across {last_run.get('companies', 0)} employers"
+              + (f" · {len(last_run.get('deferred') or [])} batch(es) deferred to the next run"
+                 if last_run.get("deferred") else "")),
         stage("Matching", last_assess, True,
               f"{len(assessed)} assessed by pipeline, "
               f"{len(external)} assessed in JobSync, "

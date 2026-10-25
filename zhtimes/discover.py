@@ -368,7 +368,7 @@ def already_known(job, token, req_id):
 
 def push(jobs, token, dry=False, enrich=False):
     sent = {"batches": 0, "created": 0, "updated": 0, "other": 0, "skipped": 0,
-            "calls": 0, "rate_limited": False, "errors": []}
+            "calls": 0, "rate_limited": False, "errors": [], "deferred": []}
     seen = load_seen()
 
     if not enrich:
@@ -378,9 +378,13 @@ def push(jobs, token, dry=False, enrich=False):
             if url and url in seen:
                 sent["skipped"] += 1          # known locally: costs no MCP call
                 continue
-            if sent["calls"] >= MCP_CALL_BUDGET:
-                sent["errors"].append(
-                    f"call budget ({MCP_CALL_BUDGET}) reached before checking "
+            # Reserve room for the pushes themselves. Spending the entire
+            # budget on lookups means the first batch trips the ceiling and is
+            # counted but never sent — so nothing is ever created, every run
+            # reports created=0, and the queue never drains.
+            if sent["calls"] >= LOOKUP_BUDGET:
+                sent["deferred"].append(
+                    f"lookup budget ({LOOKUP_BUDGET} of {MCP_CALL_BUDGET}) reached before checking "
                     f"{len(jobs) - len(fresh) - sent['skipped']} posting(s) — they will be "
                     f"picked up on the next run")
                 break
@@ -407,7 +411,7 @@ def push(jobs, token, dry=False, enrich=False):
         if dry:
             continue
         if sent["calls"] > MCP_CALL_BUDGET:
-            sent["errors"].append("call budget reached mid-push — remaining batches deferred")
+            sent["deferred"].append("call budget reached mid-push — remaining batches deferred")
             break
         try:
             resp = _rpc(token, "tools/call",
@@ -439,6 +443,18 @@ def push(jobs, token, dry=False, enrich=False):
                 + (f", resets in {wait.group(1)}s" if wait else "")
                 + " — postings in this batch were NOT saved")
             sent["rate_limited"] = True
+        else:
+            # Only a batch JobSync actually accepted is remembered. Recording a
+            # rate-limited or deferred batch would mark work as done that never
+            # happened, and it would never be retried.
+            for item in chunk:
+                if item.get("jobUrl"):
+                    seen[item["jobUrl"]] = datetime.now(timezone.utc).date().isoformat()
+
+    # Persist what we learned. Without this the seen set is dead code: every run
+    # re-verifies every posting with find_job, which burns the whole MCP budget
+    # on questions already answered and starves the stage behind it.
+    save_seen(seen)
     return sent
 
 # ------------------------------------------------------------------- main
@@ -550,6 +566,9 @@ def main():
         "rate_limited": sent["rate_limited"],
         "fetch_errors": stats["errors"],
         "push_errors": sent["errors"],
+        # Deferral is the budget control doing its job, not a failure. Reporting
+        # it as failed every single day teaches the reader to ignore the status.
+        "deferred": sent.get("deferred", []),
         "ok": not (sent["errors"] or stats["errors"]),
     }
     log_line(a.log, (f"companies={summary['companies']} fetched={summary['fetched']} "
