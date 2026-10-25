@@ -9,6 +9,16 @@
   "source": "Greenhouse",
   "description": "(sample posting text for Senior Technical Program Manager, Trust & Safety at Northwind Analytics)"
  },
+ "https://example.com/vance/dir-security-governance": {
+  "jobTitle": "Director, Security Governance & Compliance",
+  "company": "Vance Maritime Group",
+  "jobUrl": "https://example.com/vance/dir-security-governance",
+  "location": "Remote \u2014 US",
+  "workplaceType": "Remote",
+  "jobType": "Full-time",
+  "source": "Greenhouse",
+  "description": "(sample posting text for Director, Security Governance & Compliance at Vance Maritime Group)"
+ },
  "https://example.com/halden/pm-channel": {
   "jobTitle": "Program Manager, Channel Partnerships",
   "company": "Halden Instruments",
@@ -28,5 +38,15 @@
   "jobType": "Full-time",
   "source": "Lever",
   "description": "(sample posting text for Staff Software Engineer, Platform at Calder & Roe)"
+ },
+ "https://example.com/ashgrove/spm-clinical-data": {
+  "jobTitle": "Senior Program Manager, Clinical Data Platform",
+  "company": "Ashgrove Health",
+  "jobUrl": "https://example.com/ashgrove/spm-clinical-data",
+  "location": "Remote \u2014 US (EST hours)",
+  "workplaceType": "Remote",
+  "jobType": "Full-time",
+  "source": "Lever",
+  "description": "(sample posting text for Senior Program Manager, Clinical Data Platform at Ashgrove Health)"
  }
 }

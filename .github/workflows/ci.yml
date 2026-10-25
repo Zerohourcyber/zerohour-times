@@ -114,7 +114,7 @@ jobs:
           t = pathlib.Path("out/index.html").read_text()
           checks = {
               "masthead":            "The ZeroHour Times" in t,
-              "three sample jobs":   t.count('<details class="ad"') == 3,
+              "five sample jobs" :   t.count('<details class="ad"') == 5,
               "apply badge":         "b-apply" in t,
               "explore badge":       "b-explore" in t,
               "skip badge":          "b-skip" in t,
@@ -181,7 +181,7 @@ jobs:
           t = pathlib.Path("page.html").read_text()
           checks = {
               "masthead":              "The ZeroHour Times" in t,
-              "three sample jobs":     t.count('<details class="ad"') == 3,
+              "five sample jobs" :     t.count('<details class="ad"') == 5,
               "sample data rendered":  "Northwind" in t,
               "not a directory list":  "Directory listing" not in t,
               "not the placeholder":   "No edition has been printed yet" not in t,
