@@ -1,0 +1,114 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  secrets:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0          # gitleaks needs history
+      - name: Project secret scan
+        run: python3 scripts/scan-secrets.py
+      - name: gitleaks (second opinion, including history)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  python:
+    name: Python checks
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.12"]    # 3.9 is the floor (zoneinfo)
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile every module
+        run: python -m compileall -q zhtimes scripts samples
+      - name: No third-party imports
+        # The whole install story rests on this being true. If someone adds a
+        # dependency, CI should say so before a user hits a pip failure.
+        run: |
+          python - <<'PY'
+          import ast, pathlib, sys
+          stdlib = set(sys.stdlib_module_names)
+          local = {p.stem for p in pathlib.Path("zhtimes").glob("*.py")}
+          bad = []
+          for f in pathlib.Path("zhtimes").glob("*.py"):
+              tree = ast.parse(f.read_text())
+              for node in ast.walk(tree):
+                  if isinstance(node, ast.Import):
+                      mods = [a.name.split(".")[0] for a in node.names]
+                  elif isinstance(node, ast.ImportFrom):
+                      mods = [(node.module or "").split(".")[0]]
+                  else:
+                      continue
+                  for m in mods:
+                      if m and m not in stdlib and m not in local:
+                          bad.append(f"{f.name}: {m}")
+          if bad:
+              print("Third-party imports found:\n  " + "\n  ".join(bad)); sys.exit(1)
+          print("stdlib only — no dependencies to install")
+          PY
+
+  render:
+    name: Dashboard renders from sample data
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Build the demo front page
+        run: |
+          ZHT_STATE_DIR="$PWD/samples/state" ZHT_WWW_DIR="$PWD/out" \
+            python3 zhtimes/report.py --config config.example.json
+      - name: Assert it looks like a newspaper
+        run: |
+          python3 - <<'PY'
+          import pathlib, sys
+          t = pathlib.Path("out/index.html").read_text()
+          checks = {
+              "masthead":            "The ZeroHour Times" in t,
+              "three sample jobs":   t.count('<details class="ad"') == 3,
+              "apply badge":         "b-apply" in t,
+              "explore badge":       "b-explore" in t,
+              "skip badge":          "b-skip" in t,
+              "research section":    "Our Correspondent Reports" in t,
+              "validator downgrade": "Automated downgrade" in t,
+              "help wanted panel":   "Help Wanted" in t,
+              "no unrendered escapes": "\\n" not in t,
+          }
+          for k, v in checks.items():
+              print(f"  {'ok ' if v else 'FAIL'} {k}")
+          sys.exit(0 if all(checks.values()) else 1)
+          PY
+
+  compose:
+    name: Compose file is valid
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate with placeholder secrets
+        run: |
+          printf 'AUTH_SECRET=ci\nENCRYPTION_KEY=ci\n' > .env
+          docker compose config --quiet
+          echo "compose config valid"
+      - name: Fails loudly without secrets
+        run: |
+          rm -f .env
+          if docker compose config --quiet 2>/dev/null; then
+            echo "expected compose to refuse to start without AUTH_SECRET"; exit 1
+          fi
+          echo "correctly refuses to start unconfigured"

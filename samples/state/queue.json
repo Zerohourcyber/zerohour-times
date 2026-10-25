@@ -1,0 +1,32 @@
+{
+ "https://example.com/northwind/tpm-trust-safety": {
+  "jobTitle": "Senior Technical Program Manager, Trust & Safety",
+  "company": "Northwind Analytics",
+  "jobUrl": "https://example.com/northwind/tpm-trust-safety",
+  "location": "Remote \u2014 US",
+  "workplaceType": "Remote",
+  "jobType": "Full-time",
+  "source": "Greenhouse",
+  "description": "(sample posting text for Senior Technical Program Manager, Trust & Safety at Northwind Analytics)"
+ },
+ "https://example.com/halden/pm-channel": {
+  "jobTitle": "Program Manager, Channel Partnerships",
+  "company": "Halden Instruments",
+  "jobUrl": "https://example.com/halden/pm-channel",
+  "location": "Remote \u2014 US",
+  "workplaceType": "Remote",
+  "jobType": "Full-time",
+  "source": "Ashby",
+  "description": "(sample posting text for Program Manager, Channel Partnerships at Halden Instruments)"
+ },
+ "https://example.com/calder/staff-swe": {
+  "jobTitle": "Staff Software Engineer, Platform",
+  "company": "Calder & Roe",
+  "jobUrl": "https://example.com/calder/staff-swe",
+  "location": "Remote \u2014 US",
+  "workplaceType": "Remote",
+  "jobType": "Full-time",
+  "source": "Lever",
+  "description": "(sample posting text for Staff Software Engineer, Platform at Calder & Roe)"
+ }
+}

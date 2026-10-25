@@ -1,0 +1,65 @@
+# The ZeroHour Times + JobSync, together, with one command:
+#
+#     cp .env.example .env   &&   ./scripts/setup.sh   &&   docker compose up -d
+#
+# JobSync is NOT part of this project. It is an excellent open-source job
+# tracker by Gsync (MIT) that we run unmodified from its published image and
+# integrate with through its documented MCP interface. See ATTRIBUTION.md.
+name: zerohour-times
+
+services:
+  jobsync:
+    image: ghcr.io/gsync/jobsync:1.1.22
+    container_name: zht-jobsync
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=file:/data/dev.db
+      - NEXTAUTH_URL=${JOBSYNC_PUBLIC_URL:-http://localhost:3737}
+      - AUTH_TRUST_HOST=true
+      # Both MUST be set, and must not change once data exists:
+      #   AUTH_SECRET    unset -> a new one per restart -> you are logged out every restart
+      #   ENCRYPTION_KEY encrypts the provider keys JobSync stores; losing it is unrecoverable
+      - AUTH_SECRET=${AUTH_SECRET:?set AUTH_SECRET in .env (scripts/setup.sh generates one)}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY:?set ENCRYPTION_KEY in .env}
+      - TZ=${ZHT_TZ:-UTC}
+      # Required: this is how The ZeroHour Times talks to JobSync.
+      - MCP_ENABLED=true
+    ports:
+      # Localhost only. JobSync holds your résumé and job history, and its
+      # signup is open by default — anyone who can reach the port can register.
+      - "127.0.0.1:${JOBSYNC_PORT:-3737}:3737"
+    volumes:
+      - jobsync-data:/data
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:3737"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  zerohour-times:
+    build: .
+    image: zerohour-times:local
+    container_name: zht-app
+    restart: unless-stopped
+    depends_on:
+      jobsync:
+        condition: service_healthy
+    env_file: [.env]
+    environment:
+      # Container-to-container: the service name, not localhost.
+      - JOBSYNC_URL=http://jobsync:3737
+      - ZHT_STATE_DIR=/data
+    ports:
+      # Localhost only. The dashboard is READ-ONLY and UNAUTHENTICATED.
+      - "127.0.0.1:${ZHT_DASHBOARD_PORT:-8099}:8099"
+    volumes:
+      - zht-data:/data
+      # Your profile and tuned config, mounted read-only. Both are gitignored.
+      - ./profile.md:/app/profile.md:ro
+      - ./config.json:/app/config.json:ro
+
+volumes:
+  jobsync-data:
+  zht-data:

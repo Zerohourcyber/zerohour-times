@@ -1,0 +1,13 @@
+{
+  "ran_at": "2026-10-24T16:41:44+00:00",
+  "companies": 119,
+  "fetched": 12548,
+  "kept": 3,
+  "created": 3,
+  "skipped": 0,
+  "mcp_calls": 7,
+  "rate_limited": false,
+  "fetch_errors": [],
+  "push_errors": [],
+  "ok": true
+}

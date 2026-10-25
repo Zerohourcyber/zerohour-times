@@ -1,0 +1,193 @@
+# Candidate employers for US-remote TPM / AI governance / security GRC / AI enablement.
+# Every name is resolved against the live board API by resolve.py; unverified names never
+# enter the watchlist, because a wrong token fails silently and looks like "no openings".
+# --- GRC, compliance, trust and audit vendors (closest fit to SOC 2 + NIST AI RMF)
+Drata
+Secureframe
+Hyperproof
+LogicGate
+OneTrust
+Thoropass
+AuditBoard
+Sprinto
+Vanta
+Scrut Automation
+Anecdotes
+Kertos
+TrustCloud
+Conveyor
+SafeBase
+Whistic
+Prevalent
+Panorays
+ProcessUnity
+Archer
+Diligent
+Riskonnect
+Resolver
+Onspring
+# --- security
+CrowdStrike
+Okta
+1Password
+Snyk
+Wiz
+Abnormal Security
+Tailscale
+Datadog
+Elastic
+Rapid7
+Tenable
+Huntress
+Dragos
+Chainguard
+Teleport
+Cribl
+Sumo Logic
+Arctic Wolf
+Expel
+Red Canary
+Corelight
+ExtraHop
+Netskope
+Zscaler
+Cloudflare
+Sophos
+Proofpoint
+Mimecast
+KnowBe4
+Sysdig
+Aqua Security
+Orca Security
+Lacework
+JumpCloud
+Duo Security
+Material Security
+Nightfall
+Semgrep
+Socket
+Endor Labs
+Oso
+WorkOS
+Stytch
+Descope
+Persona
+Alloy
+Sardine
+Unit21
+Hummingbird
+# --- AI labs, infrastructure and tooling
+Anthropic
+Scale AI
+Hugging Face
+Cohere
+Weights and Biases
+Together AI
+Mistral AI
+Runway
+Perplexity
+Replicate
+Modal
+Baseten
+Fireworks AI
+Anyscale
+LangChain
+LlamaIndex
+Pinecone
+Weaviate
+Chroma
+Sierra
+Harvey
+Abridge
+Glean
+Writer
+Typeface
+Synthesia
+ElevenLabs
+Luma AI
+Contextual AI
+Credo AI
+Fiddler AI
+Arthur
+Robust Intelligence
+Protect AI
+Lakera
+HiddenLayer
+# --- remote-first and distributed operators
+GitLab
+Zapier
+Automattic
+Remote
+Deel
+Oyster
+Grafana Labs
+Supabase
+Sourcegraph
+Render
+Doist
+Buffer
+Close
+Hotjar
+Toggl
+Ghost
+Float
+Chili Piper
+Hopin
+Prezi
+# --- platform, fintech, health, data
+Stripe
+Plaid
+Brex
+Affirm
+Coinbase
+Gusto
+Notion
+Grammarly
+Twilio
+Reddit
+Instacart
+DoorDash
+Airtable
+Asana
+Calendly
+Figma
+Discord
+Databricks
+Linear
+Ramp
+Mercury
+Modern Treasury
+Checkr
+Vouched
+Clerk
+Chime
+Marqeta
+Lithic
+Column
+Increase
+Spring Health
+Included Health
+Komodo Health
+Hinge Health
+Omada Health
+Lyra Health
+Headway
+Grow Therapy
+Transcarent
+Datavant
+Verily
+Tempus
+Benchling
+Recursion
+Atropos Health
+Truveta
+Dbt Labs
+Fivetran
+Airbyte
+Census
+Hightouch
+Monte Carlo
+Metaplane
+Atlan
+Select Star
+Secoda

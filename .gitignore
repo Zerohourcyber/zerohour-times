@@ -1,0 +1,31 @@
+# --- personal data: never commit -------------------------------------------
+# Your profile, written from your own CV. The example is versioned; this is not.
+profile.md
+# Your tuned watchlist and filters. config.example.json is versioned.
+config.json
+# Secrets.
+.env
+*.key
+*-token
+# --- runtime state ----------------------------------------------------------
+/data/
+state/
+*.jsonl
+queue.json
+seen.json
+last-run.json
+spend.json
+externally-scored.json
+calib-queue.json
+resolved.json
+digest-*.md
+www/
+# --- the bundled demo data MUST ship, or `run.py demo` fails on a fresh clone --
+!samples/state/
+!samples/state/*.json
+!samples/state/*.jsonl
+
+# --- python ------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+.venv/

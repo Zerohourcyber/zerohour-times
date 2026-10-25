@@ -1,0 +1,600 @@
+{
+  "_readme": "Optional starter watchlist: 119 employer job boards, each verified to return postings at the time it was added. Weighted toward technology, security and GRC because that is what its author was searching for \u2014 it is a starting point, not a recommendation. Merge it with:\n  python3 zhtimes/resolve.py --names employers.txt --merge config.json\nor copy the entries you want into config.json yourself. Verify before trusting: companies change ATS, and a stale token looks exactly like 'no openings'.",
+  "watchlist": [
+    {
+      "board": "ashby",
+      "token": "1password",
+      "company": "1Password"
+    },
+    {
+      "board": "ashby",
+      "token": "abridge",
+      "company": "Abridge"
+    },
+    {
+      "board": "ashby",
+      "token": "airbyte",
+      "company": "Airbyte"
+    },
+    {
+      "board": "ashby",
+      "token": "arthur",
+      "company": "Arthur"
+    },
+    {
+      "board": "ashby",
+      "token": "atlan",
+      "company": "Atlan"
+    },
+    {
+      "board": "ashby",
+      "token": "atroposhealth",
+      "company": "Atropos Health"
+    },
+    {
+      "board": "ashby",
+      "token": "baseten",
+      "company": "Baseten"
+    },
+    {
+      "board": "ashby",
+      "token": "benchling",
+      "company": "Benchling"
+    },
+    {
+      "board": "ashby",
+      "token": "chilipiper",
+      "company": "Chili Piper"
+    },
+    {
+      "board": "ashby",
+      "token": "clerk",
+      "company": "Clerk"
+    },
+    {
+      "board": "ashby",
+      "token": "close",
+      "company": "Close"
+    },
+    {
+      "board": "ashby",
+      "token": "cohere",
+      "company": "Cohere"
+    },
+    {
+      "board": "ashby",
+      "token": "column",
+      "company": "Column"
+    },
+    {
+      "board": "ashby",
+      "token": "drata",
+      "company": "Drata"
+    },
+    {
+      "board": "ashby",
+      "token": "elevenlabs",
+      "company": "ElevenLabs"
+    },
+    {
+      "board": "ashby",
+      "token": "fireworks",
+      "company": "Fireworks AI"
+    },
+    {
+      "board": "ashby",
+      "token": "float",
+      "company": "Float"
+    },
+    {
+      "board": "ashby",
+      "token": "grow-therapy",
+      "company": "Grow Therapy"
+    },
+    {
+      "board": "ashby",
+      "token": "harvey",
+      "company": "Harvey"
+    },
+    {
+      "board": "ashby",
+      "token": "headway",
+      "company": "Headway"
+    },
+    {
+      "board": "ashby",
+      "token": "hightouch",
+      "company": "Hightouch"
+    },
+    {
+      "board": "ashby",
+      "token": "hinge-health",
+      "company": "Hinge Health"
+    },
+    {
+      "board": "ashby",
+      "token": "kertos",
+      "company": "Kertos"
+    },
+    {
+      "board": "ashby",
+      "token": "langchain",
+      "company": "LangChain"
+    },
+    {
+      "board": "ashby",
+      "token": "linear",
+      "company": "Linear"
+    },
+    {
+      "board": "ashby",
+      "token": "llamaindex",
+      "company": "LlamaIndex"
+    },
+    {
+      "board": "ashby",
+      "token": "lumaai",
+      "company": "Luma AI"
+    },
+    {
+      "board": "ashby",
+      "token": "materialsecurity",
+      "company": "Material Security"
+    },
+    {
+      "board": "ashby",
+      "token": "modal",
+      "company": "Modal"
+    },
+    {
+      "board": "ashby",
+      "token": "moderntreasury",
+      "company": "Modern Treasury"
+    },
+    {
+      "board": "ashby",
+      "token": "notion",
+      "company": "Notion"
+    },
+    {
+      "board": "ashby",
+      "token": "openai",
+      "company": "OpenAI"
+    },
+    {
+      "board": "ashby",
+      "token": "oso",
+      "company": "Oso"
+    },
+    {
+      "board": "ashby",
+      "token": "oyster",
+      "company": "Oyster"
+    },
+    {
+      "board": "ashby",
+      "token": "perplexity",
+      "company": "Perplexity"
+    },
+    {
+      "board": "ashby",
+      "token": "persona",
+      "company": "Persona"
+    },
+    {
+      "board": "ashby",
+      "token": "pinecone",
+      "company": "Pinecone"
+    },
+    {
+      "board": "ashby",
+      "token": "plaid",
+      "company": "Plaid"
+    },
+    {
+      "board": "ashby",
+      "token": "ramp",
+      "company": "Ramp"
+    },
+    {
+      "board": "ashby",
+      "token": "render",
+      "company": "Render"
+    },
+    {
+      "board": "ashby",
+      "token": "runway",
+      "company": "Runway"
+    },
+    {
+      "board": "ashby",
+      "token": "sardine",
+      "company": "Sardine"
+    },
+    {
+      "board": "ashby",
+      "token": "semgrep",
+      "company": "Semgrep"
+    },
+    {
+      "board": "ashby",
+      "token": "sierra",
+      "company": "Sierra"
+    },
+    {
+      "board": "ashby",
+      "token": "snyk",
+      "company": "Snyk"
+    },
+    {
+      "board": "ashby",
+      "token": "supabase",
+      "company": "Supabase"
+    },
+    {
+      "board": "ashby",
+      "token": "synthesia",
+      "company": "Synthesia"
+    },
+    {
+      "board": "ashby",
+      "token": "vanta",
+      "company": "Vanta"
+    },
+    {
+      "board": "ashby",
+      "token": "weaviate",
+      "company": "Weaviate"
+    },
+    {
+      "board": "ashby",
+      "token": "workos",
+      "company": "WorkOS"
+    },
+    {
+      "board": "ashby",
+      "token": "writer",
+      "company": "Writer"
+    },
+    {
+      "board": "ashby",
+      "token": "zapier",
+      "company": "Zapier"
+    },
+    {
+      "board": "greenhouse",
+      "token": "abnormalsecurity",
+      "company": "Abnormal Security"
+    },
+    {
+      "board": "greenhouse",
+      "token": "affirm",
+      "company": "Affirm"
+    },
+    {
+      "board": "greenhouse",
+      "token": "airtable",
+      "company": "Airtable"
+    },
+    {
+      "board": "greenhouse",
+      "token": "alloy",
+      "company": "Alloy"
+    },
+    {
+      "board": "greenhouse",
+      "token": "anthropic",
+      "company": "Anthropic"
+    },
+    {
+      "board": "greenhouse",
+      "token": "archer",
+      "company": "Archer"
+    },
+    {
+      "board": "greenhouse",
+      "token": "asana",
+      "company": "Asana"
+    },
+    {
+      "board": "greenhouse",
+      "token": "brex",
+      "company": "Brex"
+    },
+    {
+      "board": "greenhouse",
+      "token": "calendly",
+      "company": "Calendly"
+    },
+    {
+      "board": "greenhouse",
+      "token": "chainguard",
+      "company": "Chainguard"
+    },
+    {
+      "board": "greenhouse",
+      "token": "checkr",
+      "company": "Checkr"
+    },
+    {
+      "board": "greenhouse",
+      "token": "chime",
+      "company": "Chime"
+    },
+    {
+      "board": "greenhouse",
+      "token": "cloudflare",
+      "company": "Cloudflare"
+    },
+    {
+      "board": "greenhouse",
+      "token": "coinbase",
+      "company": "Coinbase"
+    },
+    {
+      "board": "greenhouse",
+      "token": "corelight",
+      "company": "Corelight"
+    },
+    {
+      "board": "greenhouse",
+      "token": "cribl",
+      "company": "Cribl"
+    },
+    {
+      "board": "greenhouse",
+      "token": "databricks",
+      "company": "Databricks"
+    },
+    {
+      "board": "greenhouse",
+      "token": "datadog",
+      "company": "Datadog"
+    },
+    {
+      "board": "greenhouse",
+      "token": "descope",
+      "company": "Descope"
+    },
+    {
+      "board": "greenhouse",
+      "token": "diligent",
+      "company": "Diligent"
+    },
+    {
+      "board": "greenhouse",
+      "token": "discord",
+      "company": "Discord"
+    },
+    {
+      "board": "greenhouse",
+      "token": "doordashusa",
+      "company": "DoorDash"
+    },
+    {
+      "board": "greenhouse",
+      "token": "dragos",
+      "company": "Dragos"
+    },
+    {
+      "board": "greenhouse",
+      "token": "elastic",
+      "company": "Elastic"
+    },
+    {
+      "board": "greenhouse",
+      "token": "endorlabs",
+      "company": "Endor Labs"
+    },
+    {
+      "board": "greenhouse",
+      "token": "expel",
+      "company": "Expel"
+    },
+    {
+      "board": "greenhouse",
+      "token": "figma",
+      "company": "Figma"
+    },
+    {
+      "board": "greenhouse",
+      "token": "fivetran",
+      "company": "Fivetran"
+    },
+    {
+      "board": "greenhouse",
+      "token": "ghost",
+      "company": "Ghost"
+    },
+    {
+      "board": "greenhouse",
+      "token": "gitlab",
+      "company": "GitLab"
+    },
+    {
+      "board": "greenhouse",
+      "token": "grafanalabs",
+      "company": "Grafana Labs"
+    },
+    {
+      "board": "greenhouse",
+      "token": "gusto",
+      "company": "Gusto"
+    },
+    {
+      "board": "greenhouse",
+      "token": "hiddenlayer",
+      "company": "HiddenLayer"
+    },
+    {
+      "board": "greenhouse",
+      "token": "huntress",
+      "company": "Huntress"
+    },
+    {
+      "board": "greenhouse",
+      "token": "hyperproof",
+      "company": "Hyperproof"
+    },
+    {
+      "board": "greenhouse",
+      "token": "instacart",
+      "company": "Instacart"
+    },
+    {
+      "board": "greenhouse",
+      "token": "knowbe4",
+      "company": "KnowBe4"
+    },
+    {
+      "board": "greenhouse",
+      "token": "komodohealth",
+      "company": "Komodo Health"
+    },
+    {
+      "board": "greenhouse",
+      "token": "lithic",
+      "company": "Lithic"
+    },
+    {
+      "board": "greenhouse",
+      "token": "logicgate",
+      "company": "LogicGate"
+    },
+    {
+      "board": "greenhouse",
+      "token": "mercury",
+      "company": "Mercury"
+    },
+    {
+      "board": "greenhouse",
+      "token": "netskope",
+      "company": "Netskope"
+    },
+    {
+      "board": "greenhouse",
+      "token": "okta",
+      "company": "Okta"
+    },
+    {
+      "board": "greenhouse",
+      "token": "omadahealth",
+      "company": "Omada Health"
+    },
+    {
+      "board": "greenhouse",
+      "token": "onetrust",
+      "company": "OneTrust"
+    },
+    {
+      "board": "greenhouse",
+      "token": "orcasecurity",
+      "company": "Orca Security"
+    },
+    {
+      "board": "greenhouse",
+      "token": "ramp",
+      "company": "Ramp"
+    },
+    {
+      "board": "greenhouse",
+      "token": "reddit",
+      "company": "Reddit"
+    },
+    {
+      "board": "greenhouse",
+      "token": "remote",
+      "company": "Remote"
+    },
+    {
+      "board": "greenhouse",
+      "token": "scaleai",
+      "company": "Scale AI"
+    },
+    {
+      "board": "greenhouse",
+      "token": "socket",
+      "company": "Socket"
+    },
+    {
+      "board": "greenhouse",
+      "token": "stripe",
+      "company": "Stripe"
+    },
+    {
+      "board": "greenhouse",
+      "token": "sumologic",
+      "company": "Sumo Logic"
+    },
+    {
+      "board": "greenhouse",
+      "token": "tailscale",
+      "company": "Tailscale"
+    },
+    {
+      "board": "greenhouse",
+      "token": "thoropass",
+      "company": "Thoropass"
+    },
+    {
+      "board": "greenhouse",
+      "token": "togetherai",
+      "company": "Together AI"
+    },
+    {
+      "board": "greenhouse",
+      "token": "truveta",
+      "company": "Truveta"
+    },
+    {
+      "board": "greenhouse",
+      "token": "twilio",
+      "company": "Twilio"
+    },
+    {
+      "board": "greenhouse",
+      "token": "typeface",
+      "company": "Typeface"
+    },
+    {
+      "board": "greenhouse",
+      "token": "zscaler",
+      "company": "Zscaler"
+    },
+    {
+      "board": "lever",
+      "token": "anyscale",
+      "company": "Anyscale"
+    },
+    {
+      "board": "lever",
+      "token": "includedhealth",
+      "company": "Included Health"
+    },
+    {
+      "board": "lever",
+      "token": "jumpcloud",
+      "company": "JumpCloud"
+    },
+    {
+      "board": "lever",
+      "token": "lyrahealth",
+      "company": "Lyra Health"
+    },
+    {
+      "board": "lever",
+      "token": "matchgroup",
+      "company": "Match Group"
+    },
+    {
+      "board": "lever",
+      "token": "secureframe",
+      "company": "Secureframe"
+    },
+    {
+      "board": "lever",
+      "token": "sophos",
+      "company": "Sophos"
+    }
+  ]
+}

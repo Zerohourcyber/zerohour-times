@@ -1,0 +1,241 @@
+#!/usr/bin/env python3
+"""Build or update profile.md by answering questions.
+
+The profile is the single most important file in the project: every assessment
+is made against it, and the AI is instructed never to claim anything that is not
+in it. That makes hand-editing a structured file with provenance tags a bad
+first experience — so this asks plain questions and writes the structure for you.
+
+    python3 scripts/profile.py            # create or update profile.md
+    python3 scripts/profile.py --show     # print what is there now
+
+Nothing here is sent anywhere. It writes one local file.
+"""
+
+import argparse
+import os
+import pathlib
+import shutil
+import sys
+from datetime import date
+
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+PROFILE = ROOT / "profile.md"
+
+B = "\033[1m"; DIM = "\033[2m"; OFF = "\033[0m"
+
+
+def say(msg):
+    print(f"\n{B}{msg}{OFF}")
+
+
+def hint(msg):
+    print(f"{DIM}{msg}{OFF}")
+
+
+def ask(prompt, default=""):
+    try:
+        got = input(f"{prompt}{f' [{default}]' if default else ''}: ").strip()
+    except EOFError:
+        return default
+    return got or default
+
+
+def ask_many(prompt, hint_text=None):
+    """Collect a list. Blank line ends it."""
+    if hint_text:
+        hint(hint_text)
+    print(f"{prompt} {DIM}(one per line, blank line to finish){OFF}")
+    out = []
+    while True:
+        try:
+            line = input("  - ").strip()
+        except EOFError:
+            break
+        if not line:
+            break
+        out.append(line)
+    return out
+
+
+def yes(prompt, default=True):
+    d = "Y/n" if default else "y/N"
+    got = ask(f"{prompt} ({d})").lower()
+    if not got:
+        return default
+    return got.startswith("y")
+
+
+def build():
+    say("Your profile")
+    hint("Every job is assessed against this, and the AI may not claim anything that\n"
+         "is not here. Be accurate rather than impressive — an honest profile produces\n"
+         "a useful assessment, an inflated one produces flattery.")
+
+    years = ask("Roughly how many years of professional experience do you have", "10")
+    headline = ask("In one line, what kind of work have you been doing",
+                   "technology programme management")
+    recent = ask("Your most recent job title", "")
+    recent_co = ask("  ...at which employer", "")
+    recent_when = ask("  ...dates (e.g. 2023–2026, or 'present')", "")
+    available = ask("When could you start (e.g. immediately, 4 weeks' notice)", "immediately")
+    auth = ask("Work authorisation (e.g. US citizen, EU national, needs sponsorship)", "")
+
+    say("What you are looking for")
+    targets = ask("Target job titles, comma separated",
+                  "Technical Program Manager, Program Manager")
+    remote = ask("Remote requirement (fully remote / hybrid ok / onsite ok)", "fully remote")
+    pay_lo = ask("Minimum acceptable base salary (numbers only, blank to skip)", "")
+    pay_hi = ask("Target base salary (blank to skip)", "")
+    emp = ask("Employment type (full-time, contract, either)", "full-time")
+
+    say("Education and credentials")
+    hint("Degrees, certifications, licences, clearances. Leave blank if none.")
+    education = ask_many("Degrees")
+    certs = ask_many("Certifications and licences")
+    clearance = ask("Security clearance, if any (blank if none)", "")
+    clearance_status = ""
+    if clearance:
+        hint("If you have left the role that sponsored it, its current status may be\n"
+             "uncertain. Saying so is better than guessing — the AI will not assert\n"
+             "either way when it is marked unknown.")
+        clearance_status = ask("  Current status (active / unknown / lapsed)", "unknown")
+
+    say("What you have actually done")
+    hint("This is the part that matters most. Write OUTCOMES with numbers, not duties.\n"
+         "  Good: 'Took late submissions from 23 to zero in three months across 9 teams'\n"
+         "  Weak: 'Responsible for process improvement'\n"
+         "Six to twelve of these is plenty.")
+    achievements = ask_many("Achievements")
+
+    say("Your skills")
+    hint("Group them how you would say them out loud. Comma separated.")
+    skills = ask_many("Skill groups, e.g. 'Programme management: intake, roadmap, risk logs'")
+
+    say("What is NOT on your CV")
+    hint("Things employers in your field commonly ask for that you cannot evidence.\n"
+         "This is what stops the AI inventing them for you, and it is what turns a gap\n"
+         "report into something useful instead of flattering.")
+    missing = ask_many("Not documented")
+
+    say("Hard limits")
+    hint("Things that make a job wrong for you even if you could do it.")
+    limits = ask_many("Confirmed limits",
+                      "e.g. 'Will not take a role whose daily work is writing code'")
+
+    today = date.today().isoformat()
+    L = []
+    add = L.append
+    add("# Candidate profile — verified facts only")
+    add("#")
+    add(f"# Generated by scripts/profile.py on {today}. Edit freely; re-run to rebuild.")
+    add("#")
+    add("# Provenance tags on every claim:")
+    add("#   [R]  on your CV / résumé")
+    add("#   [O]  stated by you, not on the CV")
+    add("#   [?]  unknown — must stay unknown, never inferred")
+    add("#")
+    add("# RULE FOR THE MATCHER: nothing here may be embellished, and nothing absent")
+    add("# from here may be asserted. An absence is \"not documented\", NOT a gap.")
+    add("")
+    add("## Identity and availability")
+    add("")
+    add(f"- Around {years} years of professional experience in {headline}. [R]")
+    if recent:
+        at = f" at {recent_co}" if recent_co else ""
+        when = f" ({recent_when})" if recent_when else ""
+        add(f"- Most recent role: {recent}{at}{when}. [R]")
+    add(f"- Availability: {available}. [O]")
+    if auth:
+        add(f"- Work authorisation: {auth}. [O]")
+    add("")
+    add("## Target roles")
+    add("")
+    add(f"{targets} [O]")
+    add("")
+    add("## Constraints and preferences")
+    add("")
+    add(f"- Remote requirement: {remote}. [O]")
+    if pay_lo or pay_hi:
+        rng = f"{pay_lo}–{pay_hi}" if pay_lo and pay_hi else (pay_lo or pay_hi)
+        add(f"- Base salary target: {rng}. [O]")
+    add(f"- Employment type: {emp}. [O]")
+    add("")
+    add("## Education [R]")
+    add("")
+    for e in education or ["- (none recorded)"]:
+        add(f"- {e}" if not e.startswith("-") else e)
+    add("")
+    add("## Certifications and clearance [R]")
+    add("")
+    for c in certs:
+        add(f"- {c}")
+    if clearance:
+        if clearance_status.lower().startswith("unknown"):
+            add(f"- Clearance: {clearance} listed. **Current status is [?]** — do not assert "
+                "it is active, and do not assert it is lapsed.")
+        else:
+            add(f"- Clearance: {clearance} — {clearance_status}. [O]")
+    if not certs and not clearance:
+        add("- (none recorded)")
+    add("")
+    add("## Verified experience and evidence [R]")
+    add("")
+    for a in achievements or ["(none recorded — add some, this is what assessments cite)"]:
+        add(f"- {a}")
+    add("")
+    add("## Skills as documented [R]")
+    add("")
+    for s in skills or ["(none recorded)"]:
+        add(f"- {s}")
+    add("")
+    add("## NOT DOCUMENTED — absence of evidence, not evidence of absence")
+    add("")
+    add("The CV does not evidence the following. The matcher must report these as")
+    add("**\"not documented\"**, never as confirmed gaps, and must never assert you have them.")
+    add("")
+    for m in missing or ["(nothing recorded)"]:
+        add(f"- {m}")
+    add("")
+    add("## Confirmed limits [O]")
+    add("")
+    add("Stated preferences that are genuine constraints, not gaps:")
+    add("")
+    for l in limits or ["(none recorded)"]:
+        add(f"- {l}")
+    add("")
+    return "\n".join(L)
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--show", action="store_true", help="print the current profile and exit")
+    a = ap.parse_args()
+
+    if a.show:
+        if PROFILE.exists():
+            print(PROFILE.read_text())
+            return 0
+        print("No profile.md yet. Run this without --show to create one.", file=sys.stderr)
+        return 1
+
+    if PROFILE.exists():
+        backup = PROFILE.with_suffix(f".md.bak-{date.today().isoformat()}")
+        if not yes(f"profile.md already exists. Rebuild it? "
+                   f"(the current one is copied to {backup.name})", False):
+            print("Left unchanged.")
+            return 0
+        shutil.copy2(PROFILE, backup)
+
+    text = build()
+    PROFILE.write_text(text)
+    os.chmod(PROFILE, 0o600)
+    say("Done")
+    print(f"  Written to {PROFILE} (readable only by you).")
+    print("  Open it and check it reads like you. You can edit it directly from now on.")
+    print("  It is gitignored, so it never leaves your machine.")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
