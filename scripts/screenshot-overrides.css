@@ -1,0 +1,24 @@
+/* Rendering-only overrides for wkhtmltoimage's Qt WebKit, which predates CSS
+   Grid and modern flex sizing. Converts the grid containers and the card
+   summary row to table layout so the render matches a real browser.
+   This file is never shipped and never referenced by the product. */
+.nums{display:table !important;width:100% !important;table-layout:fixed !important}
+.nums>*{display:table-cell !important;vertical-align:middle !important;float:none !important}
+.cols{display:table !important;width:100% !important;table-layout:fixed !important;
+      border-spacing:0 !important}
+.cols>*{display:table-cell !important;vertical-align:top !important;float:none !important}
+.cols>*:first-child{width:57% !important;padding-right:22px !important}
+.cols>*:last-child{width:43% !important}
+.ad>summary{display:block !important;overflow:hidden !important}
+.ad>summary>.applybtn{float:right !important;margin-left:14px !important;
+                      white-space:nowrap !important}
+.ad>summary>.hl{display:block !important}
+.badges{display:block !important}
+.badges>.b{display:inline-block !important;margin:3px 4px 0 0 !important}
+.links{display:block !important}
+.links>a{display:inline-block !important;margin-right:20px !important}
+.press{display:block !important}
+.mastbar{display:table !important;width:100% !important;table-layout:fixed !important}
+.mastbar>*{display:table-cell !important}
+.mastbar>*:nth-child(2){text-align:center !important}
+.mastbar>*:last-child{text-align:right !important}

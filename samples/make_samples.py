@@ -441,174 +441,101 @@ JOBS = [
                  "both unresolvable from the posting, which is exactly what a first call is for."),
 ]
 
+# md() in report.py is line-based: every source line becomes its own paragraph,
+# list item or table row. Research prose therefore has to be stored one paragraph
+# per line, unwrapped, or it renders as a stack of orphaned sentences. The lines
+# are long on purpose.
+def research_doc(company, role, blocks):
+    L = [f'Below is the concise, factual research on {company} and the {role} role. All claims '
+         f'are directly sourced; where data is absent, I note "not found."',
+         "",
+         "**Every company, figure and source on this page is invented for the demo.** The domains "
+         "all resolve to example.com, which exists for exactly this purpose.",
+         ""]
+    for head, lines in blocks:
+        L += ["---", "", f"**{head}**", ""] + lines + [""]
+    return "\n".join(L)
+
+
 RESEARCH = [
-    dict(idx=0, usd=0.0449, intok=17600, outtok=1150, text="""Below is the concise, factual
-research on Northwind Analytics and the Senior Technical Program Manager, Trust & Safety role.
-All claims are directly sourced; where data is absent, I note "not found."
-
-**Every company, figure and source on this page is invented for the demo.** The domains all
-resolve to example.com, which exists for exactly this purpose.
-
----
-
-**1. COMPANY STAGE, SIZE, OWNERSHIP & MATERIAL NEWS (LAST 6 MONTHS)**
-
-- Company stage & ownership: Northwind Analytics is a private, venture-backed company founded in
-  2017, headquartered in Minneapolis. Series C closed March 2026, led by an existing investor
-  ([example-filings.example.com](https://example-filings.example.com/northwind/series-c)).
-- Size: 410 employees as of the Series C announcement
-  ([example-news.example.com](https://example-news.example.com/northwind-series-c)). A hiring
-  tracker shows headcount at 437 in September 2026, a 6.6% increase over six months
-  ([example-tracker.example.com](https://example-tracker.example.com/northwind)).
-- Material news (past 6 months):
-- In April 2026, Northwind announced a Trust & Safety function as a standalone organisation,
-  previously split between Legal and Support
-  ([example-news.example.com](https://example-news.example.com/northwind-trust-safety)).
-- In June 2026, the company published its first transparency report
-  ([example-blog.example.com](https://example-blog.example.com/northwind-transparency-2026)).
-- No layoffs, acquisitions or leadership departures found in the period. Not found: any public
-  statement about profitability or runway.
-
----
-
-**2. DAY-TO-DAY FUNCTION OF THIS ROLE (BEYOND POSTING WORDING)**
-
-The posting describes defining escalation paths, briefing leadership weekly, and driving
-programmes across Policy, Engineering and Legal
-([example.com](https://example.com/northwind/tpm-trust-safety)).
-
-However, real-world scope for this shape of role usually also includes:
-
-- **Owning the incident retrospective process** — the posting's reference to partnering with
-  on-call engineering during incidents implies the TPM runs the review afterwards, not the
-  response itself.
-- **Policy translation** — the April reorganisation moved Trust & Safety out of Legal, which
-  typically leaves a TPM converting legal language into operational rules for the first year
-  ([example-news.example.com](https://example-news.example.com/northwind-trust-safety)).
-- **Metrics definition from scratch** — the transparency report is the company's first, so the
-  measures behind it are likely still being argued about rather than inherited.
-
----
-
-**3. PUBLISHED COMPENSATION DATA (U.S.): BASE VS OTE/EQUITY**
-
-- The job posting lists a **national base salary range of $140,000–$175,000 USD**, and does not
-  mention equity or bonus ([example.com](https://example.com/northwind/tpm-trust-safety)).
-- An aggregator reports a median base of **$152,000** for senior TPM roles at companies of this
-  size, with equity eligibility at ~58% of respondents
-  ([example-salary.example.com](https://example-salary.example.com/tpm-senior)). Where the
-  aggregator and the posting disagree, both figures are shown rather than one being chosen.
-- Not found: any Northwind-specific equity structure or refresh policy.
-
----
-
-**4. AMBIGUOUS QUALIFICATIONS IN POSTING & WHAT WOULD RESOLVE THEM**
-
-From posting:
-
-- "7+ years running technical programmes, or equivalent experience in a related field." →
-  Ambiguous: what counts as a related field? Clarification: whether governance, risk or
-  compliance programme work is accepted on its own.
-- "Partners with on-call engineering during incidents." → Ambiguous: does the TPM join the
-  rotation? Clarification: whether this role carries a pager.
-- "Experience with trust & safety preferred." → Ambiguous: preferred over what, and how heavily
-  weighted against the programme-management requirement that is stated as mandatory.
-- "Occasional evening coverage during a major incident." → Ambiguous: frequency. Clarification:
-  how many major incidents occurred in the last two quarters.
-
----
-
-**5. FOUR SPECIFIC QUESTIONS TO ASK RECRUITER ABOUT THIS ROLE**
-
-1. "The Trust & Safety org became standalone in April — what moved with it, and what is still
-   owned by Legal?"
-2. "Does this TPM carry a pager, or partner with the people who do?"
-3. "The transparency report was the company's first. Who defines the measures behind the next
-   one?"
-4. "Is equity part of the package for this level, and is the base band national or
-   location-adjusted?"
-"""),
-    dict(idx=1, usd=0.0461, intok=18050, outtok=1190, text="""Below is the concise, factual
-research on Vance Maritime Group and the Director, Security Governance & Compliance role. All
-claims are directly sourced; where data is absent, I note "not found."
-
-**Every company, figure and source on this page is invented for the demo.**
-
----
-
-**1. COMPANY STAGE, SIZE, OWNERSHIP & MATERIAL NEWS (LAST 6 MONTHS)**
-
-- Company stage & ownership: Vance Maritime Group is a privately held logistics and port
-  services operator founded in 1998, headquartered in Norfolk, Virginia. Majority stake acquired
-  by a mid-market private equity fund in January 2026
-  ([example-filings.example.com](https://example-filings.example.com/vance/acquisition)).
-- Size: approximately 2,900 employees across 11 sites
-  ([example-tracker.example.com](https://example-tracker.example.com/vance)).
-- Material news (past 6 months):
-- In February 2026, Vance disclosed a vendor-related security incident affecting scheduling
-  systems at two ports; no customer data was reported compromised
-  ([example-news.example.com](https://example-news.example.com/vance-incident)).
-- In May 2026, the company stated it was pursuing SOC 2 Type II for the first time, naming it a
-  customer requirement ([example-blog.example.com](https://example-blog.example.com/vance-soc2)).
-- Not found: any public statement on the outcome of the February incident review.
-
----
-
-**2. DAY-TO-DAY FUNCTION OF THIS ROLE (BEYOND POSTING WORDING)**
-
-The posting describes owning the governance programme, leading SOC 2 Type II and ISO 27001
-cycles, and leading a team of three
-([example.com](https://example.com/vance/dir-security-governance)).
-
-Context the posting does not state:
-
-- **This is a first-time audit.** The May announcement indicates SOC 2 Type II has not been
-  achieved before, so the role is building the programme rather than maintaining one. That is
-  substantially more work in year one and should be priced accordingly.
-- **The February incident is likely in scope.** A vendor-related incident six months before a
-  first audit usually means third-party risk gets rebuilt at the same time — which matches the
-  "vendor risk" line buried in the posting's responsibilities.
-- **Private-equity ownership one year in** generally means reporting obligations upward on a
-  fixed cadence, in addition to the audit calendar.
-
----
-
-**3. PUBLISHED COMPENSATION DATA (U.S.): BASE VS OTE/EQUITY**
-
-- The posting lists **$165,000–$200,000 USD base**, plus "participation in the company equity
-  plan" with no structure given ([example.com](https://example.com/vance/dir-security-governance)).
-- Industry benchmark for Director-level GRC roles reports:
-- Average base salary: **$178,000**
-- Average annual cash compensation (base + target bonus): **$203,000**
-- Equity eligibility: ~31% of respondents at privately held firms
-  ([example-salary.example.com](https://example-salary.example.com/grc-director)).
-- Note: equity at a PE-owned private company is a materially different instrument from startup
-  equity, and the posting does not say which it is.
-
----
-
-**4. AMBIGUOUS QUALIFICATIONS IN POSTING & WHAT WOULD RESOLVE THEM**
-
-From posting:
-
-- "8+ years in security GRC or a closely related field." → Ambiguous: does programme governance
-  without a security title count? Clarification: examples of accepted backgrounds.
-- "Demonstrated experience delivering SOC 2, ISO 27001 or equivalent audits." → Ambiguous:
-  delivering as owner, or contributing evidence? Clarification: the expected level of ownership.
-- "Lead a team of three." → Ambiguous: existing team or to be hired. Clarification: whether the
-  three are in post today.
-- "Familiarity with GRC platforms preferred." → Ambiguous: which platform, and whether a
-  migration is planned.
-
----
-
-**5. FOUR SPECIFIC QUESTIONS TO ASK RECRUITER ABOUT THIS ROLE**
-
-1. "Is this the first SOC 2 Type II cycle, and what is the target date?"
-2. "Are the three analysts in post today, or is this role hiring them?"
-3. "How much of the February vendor incident's remediation sits with this role?"
-4. "Is the equity plan a traditional option grant, or a PE-style co-investment?"
-"""),
+    dict(idx=0, usd=0.0449, intok=17600, outtok=1150, text=research_doc(
+        "Northwind Analytics", "Senior Technical Program Manager, Trust & Safety", [
+        ("1. COMPANY STAGE, SIZE, OWNERSHIP & MATERIAL NEWS (LAST 6 MONTHS)", [
+            "- Company stage & ownership: Northwind Analytics is a private, venture-backed company founded in 2017, headquartered in Minneapolis. Series C closed March 2026, led by an existing investor ([example-filings.example.com](https://example-filings.example.com/northwind/series-c)).",
+            "- Size: 410 employees as of the Series C announcement ([example-news.example.com](https://example-news.example.com/northwind-series-c)). A hiring tracker shows headcount at 437 in September 2026, a 6.6% increase over six months ([example-tracker.example.com](https://example-tracker.example.com/northwind)).",
+            "- Material news (past 6 months):",
+            "- In April 2026, Northwind announced Trust & Safety as a standalone organisation, previously split between Legal and Support ([example-news.example.com](https://example-news.example.com/northwind-trust-safety)).",
+            "- In June 2026, the company published its first transparency report ([example-blog.example.com](https://example-blog.example.com/northwind-transparency-2026)).",
+            "- No layoffs, acquisitions or leadership departures found in the period. Not found: any public statement about profitability or runway.",
+        ]),
+        ("2. DAY-TO-DAY FUNCTION OF THIS ROLE (BEYOND POSTING WORDING)", [
+            "The posting describes defining escalation paths, briefing leadership weekly, and driving programmes across Policy, Engineering and Legal ([example.com](https://example.com/northwind/tpm-trust-safety)).",
+            "",
+            "However, real-world scope for this shape of role usually also includes:",
+            "",
+            "- **Owning the incident retrospective process** — the posting's reference to partnering with on-call engineering during incidents implies the TPM runs the review afterwards, not the response itself.",
+            "- **Policy translation** — the April reorganisation moved Trust & Safety out of Legal, which typically leaves a TPM converting legal language into operational rules for the first year.",
+            "- **Metrics definition from scratch** — the transparency report is the company's first, so the measures behind it are likely still being argued about rather than inherited.",
+        ]),
+        ("3. PUBLISHED COMPENSATION DATA (U.S.): BASE VS OTE/EQUITY", [
+            "- The job posting lists a **national base salary range of $140,000–$175,000 USD**, and does not mention equity or bonus ([example.com](https://example.com/northwind/tpm-trust-safety)).",
+            "- An aggregator reports a median base of **$152,000** for senior TPM roles at companies of this size, with equity eligibility at ~58% of respondents ([example-salary.example.com](https://example-salary.example.com/tpm-senior)). Where the aggregator and the posting disagree, both figures are shown rather than one being silently chosen.",
+            "- Not found: any Northwind-specific equity structure or refresh policy.",
+        ]),
+        ("4. AMBIGUOUS QUALIFICATIONS IN POSTING & WHAT WOULD RESOLVE THEM", [
+            "From posting:",
+            "",
+            '- "7+ years running technical programmes, or equivalent experience in a related field." → Ambiguous: what counts as a related field? Clarification: whether governance, risk or compliance programme work is accepted on its own.',
+            '- "Partners with on-call engineering during incidents." → Ambiguous: does the TPM join the rotation? Clarification: whether this role carries a pager.',
+            '- "Experience with trust & safety preferred." → Ambiguous: preferred over what, and how heavily weighted against the programme-management requirement stated as mandatory.',
+            '- "Occasional evening coverage during a major incident." → Ambiguous: frequency. Clarification: how many major incidents occurred in the last two quarters.',
+        ]),
+        ("5. FOUR SPECIFIC QUESTIONS TO ASK RECRUITER ABOUT THIS ROLE", [
+            '1. "The Trust & Safety org became standalone in April — what moved with it, and what is still owned by Legal?"',
+            '2. "Does this TPM carry a pager, or partner with the people who do?"',
+            '3. "The transparency report was the company\'s first. Who defines the measures behind the next one?"',
+            '4. "Is equity part of the package at this level, and is the base band national or location-adjusted?"',
+        ]),
+    ])),
+    dict(idx=1, usd=0.0461, intok=18050, outtok=1190, text=research_doc(
+        "Vance Maritime Group", "Director, Security Governance & Compliance", [
+        ("1. COMPANY STAGE, SIZE, OWNERSHIP & MATERIAL NEWS (LAST 6 MONTHS)", [
+            "- Company stage & ownership: Vance Maritime Group is a privately held logistics and port services operator founded in 1998, headquartered in Norfolk, Virginia. Majority stake acquired by a mid-market private equity fund in January 2026 ([example-filings.example.com](https://example-filings.example.com/vance/acquisition)).",
+            "- Size: approximately 2,900 employees across 11 sites ([example-tracker.example.com](https://example-tracker.example.com/vance)).",
+            "- Material news (past 6 months):",
+            "- In February 2026, Vance disclosed a vendor-related security incident affecting scheduling systems at two ports; no customer data was reported compromised ([example-news.example.com](https://example-news.example.com/vance-incident)).",
+            "- In May 2026, the company stated it was pursuing SOC 2 Type II for the first time, naming it a customer requirement ([example-blog.example.com](https://example-blog.example.com/vance-soc2)).",
+            "- Not found: any public statement on the outcome of the February incident review.",
+        ]),
+        ("2. DAY-TO-DAY FUNCTION OF THIS ROLE (BEYOND POSTING WORDING)", [
+            "The posting describes owning the governance programme, leading SOC 2 Type II and ISO 27001 cycles, and leading a team of three ([example.com](https://example.com/vance/dir-security-governance)).",
+            "",
+            "Context the posting does not state:",
+            "",
+            "- **This is a first-time audit.** The May announcement indicates SOC 2 Type II has not been achieved before, so the role is building the programme rather than maintaining one. That is substantially more work in year one and should be priced accordingly.",
+            "- **The February incident is likely in scope.** A vendor-related incident six months before a first audit usually means third-party risk gets rebuilt at the same time — which matches the vendor risk line buried in the posting's responsibilities.",
+            "- **Private-equity ownership one year in** generally means reporting obligations upward on a fixed cadence, in addition to the audit calendar.",
+        ]),
+        ("3. PUBLISHED COMPENSATION DATA (U.S.): BASE VS OTE/EQUITY", [
+            '- The posting lists **$165,000–$200,000 USD base**, plus "participation in the company equity plan" with no structure given ([example.com](https://example.com/vance/dir-security-governance)).',
+            "- Industry benchmark for Director-level GRC roles reports: average base salary **$178,000**; average annual cash compensation (base + target bonus) **$203,000**; equity eligibility ~31% of respondents at privately held firms ([example-salary.example.com](https://example-salary.example.com/grc-director)).",
+            "- Note: equity at a PE-owned private company is a materially different instrument from startup equity, and the posting does not say which it is.",
+        ]),
+        ("4. AMBIGUOUS QUALIFICATIONS IN POSTING & WHAT WOULD RESOLVE THEM", [
+            "From posting:",
+            "",
+            '- "8+ years in security GRC or a closely related field." → Ambiguous: does programme governance without a security title count? Clarification: examples of accepted backgrounds.',
+            '- "Demonstrated experience delivering SOC 2, ISO 27001 or equivalent audits." → Ambiguous: delivering as owner, or contributing evidence? Clarification: the expected level of ownership.',
+            '- "Lead a team of three." → Ambiguous: existing team or to be hired. Clarification: whether the three are in post today.',
+            '- "Familiarity with GRC platforms preferred." → Ambiguous: which platform, and whether a migration is planned.',
+        ]),
+        ("5. FOUR SPECIFIC QUESTIONS TO ASK RECRUITER ABOUT THIS ROLE", [
+            '1. "Is this the first SOC 2 Type II cycle, and what is the target date?"',
+            '2. "Are the three analysts in post today, or is this role hiring them?"',
+            '3. "How much of the February vendor incident\'s remediation sits with this role?"',
+            '4. "Is the equity plan a traditional option grant, or a PE-style co-investment?"',
+        ]),
+    ])),
 ]
 
 queue, assess, research = {}, [], []

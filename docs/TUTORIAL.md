@@ -153,6 +153,14 @@ Open <http://localhost:8099>.
 reliable; the ranking of good matches is not. See
 [AI-GOVERNANCE.md](AI-GOVERNANCE.md).
 
+If a posting is worth applying to, the research stage goes and reads about the
+company, and says where each claim came from — or says it could not find one:
+
+![Company research with sources](images/research-questions.png)
+
+<sub>Demo data. Every company and source in it is invented, which is why the
+citations all point at example.com.</sub>
+
 ## Adding employers
 
 ```bash

@@ -215,6 +215,10 @@ def md(text):
             if all(set(c) <= set("-: ") for c in cells):
                 continue
             out.append("<tr>" + "".join(f"<td>{c}</td>" for c in cells) + "</tr>")
+        elif set(line.strip()) in ({"-"}, {"*"}, {"_"}) and len(line.strip()) >= 3:
+            # A markdown rule. Without this the model's own section separators
+            # rendered as a literal row of dashes in the middle of the analysis.
+            out.append("<hr>")
         else:
             out.append(f"<p>{line}</p>")
     body, in_list, in_table = [], False, False
@@ -303,6 +307,7 @@ text-transform:uppercase;border:2px solid var(--rule);padding:5px 12px;text-deco
 color:var(--ink);white-space:nowrap;align-self:center;background:rgba(255,255,255,.4)}
 .applybtn:hover{background:var(--rule);color:var(--paper)}
 .copy{padding:2px 14px 16px;border-top:1px solid rgba(43,36,25,.3);font-size:14.5px}
+.copy hr{border:0;border-top:1px solid rgba(26,26,26,.18);margin:14px 0}
 .copy h3{font-family:'Playfair Display',serif;font-size:15px;letter-spacing:.05em;
 text-transform:uppercase;border-bottom:1px solid rgba(43,36,25,.3);padding-bottom:3px;
 margin:16px 0 6px}

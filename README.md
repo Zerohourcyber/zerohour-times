@@ -18,12 +18,11 @@ prints the result. Full credit and the reasoning behind that boundary are in
 [ATTRIBUTION.md](ATTRIBUTION.md) — **please star
 [Gsync/jobsync](https://github.com/Gsync/jobsync) too.**
 
-<!-- SCREENSHOTS: capture these from DEMO mode only, never from a real
-     instance — docs/images/README.md has the steps and the checklist. Once the
-     files are in docs/images/, delete this opening comment line and the closing
-     one at the end of the gallery block below.
 ![The ZeroHour Times front page](docs/images/newspaper.png)
--->
+
+<sub>Every company, posting and figure above is fictional — this is the bundled
+demo data, which is what `docker compose -f docker-compose.demo.yml up --build`
+shows you.</sub>
 
 > **See it before you install anything.** Demo mode builds the front page from
 > bundled fictional data — no API key, no JobSync account, nothing to configure:
@@ -37,8 +36,6 @@ prints the result. Full credit and the reasoning behind that boundary are in
 [AI governance](docs/AI-GOVERNANCE.md) · [Security & privacy](SECURITY.md) ·
 [Testing](docs/TESTING.md) · [Attribution](ATTRIBUTION.md)
 
-<!-- GALLERY: uncomment once the files exist (see docs/images/README.md).
-
 ### What an assessment looks like
 
 Every posting is scored against your profile with the evidence quoted inline, and
@@ -48,8 +45,6 @@ the three findings kept apart: demonstrated, transferable, and not documented.
 |---|---|
 | ![Eligibility and competencies](docs/images/assessment-eligibility.png) | ![Qualification and preference fit](docs/images/assessment-reasoning.png) |
 | ![Compensation, workload and gaps](docs/images/assessment-gaps.png) | ![Company research](docs/images/research-company.png) |
-
--->
 
 ---
 
