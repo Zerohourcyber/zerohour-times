@@ -51,7 +51,11 @@ fi
 if [ ! -f config.json ]; then
   cp config.example.json config.json
   say "config.json created from the example"
-  echo "  It ships with 119 verified employer job boards already configured."
+  echo "  It ships with 5 example employer job boards — enough to see the shape."
+  echo "  Want a bigger net? starter-watchlist.json holds 119 verified boards to"
+  echo "  copy entries from. To add companies by name instead, put one per line in"
+  echo "  a file and run:"
+  echo "    python3 zhtimes/resolve.py --names employers.txt --merge config.json"
   echo "  Edit filters.titleAny / titleNone to match the roles you actually want."
 fi
 
@@ -74,6 +78,6 @@ cat <<'NEXT'
   4. docker compose restart zerohour-times
   5. Open your newspaper at http://localhost:8099
 
-  Want to look around first? `docker compose run --rm --no-deps --service-ports zerohour-times demo`
+  Want to look around first? `docker compose -f docker-compose.demo.yml up --build`
   builds the dashboard from bundled sample data — no keys, no JobSync needed.
 NEXT

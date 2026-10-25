@@ -414,7 +414,7 @@ def render(d):
                  'MCP token (Settings &rarr; MCP, scope <code>jobs:write</code>), put it in '
                  '<code>.env</code>, then restart.<br>'
                  'To see what a full edition looks like first, run<br>'
-                 '<code>docker compose run --rm --no-deps --service-ports zerohour-times demo</code>'
+                 '<code>docker compose -f docker-compose.demo.yml up --build</code>'
                  '</div>')
     for o in ops:
         v = o["verdict"] or "pending"
